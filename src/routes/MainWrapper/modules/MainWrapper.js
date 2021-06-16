@@ -1,10 +1,10 @@
-export const MAIN_VIEW_SET_ALL_USERS = "MAIN_VIEW_SET_ALL_USERS";
+export const MAIN_VIEW_SET_FILTER_VALUES = "MAIN_VIEW_SET_FILTER_VALUES";
 export const MAIN_VIEW_FETCH_USER_SPINNER = "MAIN_VIEW_FETCH_USER_SPINNER";
 export const SET_MAIN_MODAL_VALUE = "SET_MAIN_MODAL_VALUE";
 
-export function setUsers(data) {
+export function setFilters(data) {
   return {
-    type: MAIN_VIEW_SET_ALL_USERS,
+    type: MAIN_VIEW_SET_FILTER_VALUES,
     payload: data,
   };
 }
@@ -23,23 +23,23 @@ export function setfetchUserSpinner(value) {
   };
 }
 
-export function fetchAllUsers() {
+export function fetchFilterValues(filter) {
   return async (dispatch, getState) => {
     await dispatch(setfetchUserSpinner(true));
     try {
-      const result = await fetch(`${__API__}/users`, {
+      const result = await fetch(`${__API__}/list.php?${filter}=list`, {
         method: "GET",
+        mode:"no-cors",
         headers: {
-          "Content-Type": "application/json; charset=utf-8",
+          "content-type": "application/json;",
           Accept: "application/json",
         },
       });
       let response = await result.json();
-      if (response.code === 200) {
-        await dispatch(setfetchUserSpinner(false));
-        console.log(response.data);
-        await dispatch(setUsers(response.data));
-      }
+      console.log(response);
+      await dispatch(setfetchUserSpinner(false));
+      console.log(response.drinks);
+      await dispatch(setFilters(response.drinks));
     } catch (e) {
       await dispatch(setfetchUserSpinner(false));
       console.log(e);
@@ -48,15 +48,15 @@ export function fetchAllUsers() {
 }
 
 export const initialState = {
-  users: [],
+  filters: [],
   userSpinner: false,
 };
 
 const ACTION_HANDLERS = {
-  [MAIN_VIEW_SET_ALL_USERS]: (state, action) => {
+  [MAIN_VIEW_SET_FILTER_VALUES]: (state, action) => {
     return {
       ...state,
-      users: action.payload,
+      filters: action.payload,
     };
   },
   [MAIN_VIEW_FETCH_USER_SPINNER]: (state, action) => {
