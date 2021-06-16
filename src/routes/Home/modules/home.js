@@ -1,75 +1,62 @@
-export const SET_MAIN_VIEW_USER = "SET_MAIN_VIEW_USER";
-export const SET_MAIN_UPATED_USER = "SET_MAIN_UPATED_USER";
-export const SET_MAIN_USER_UPDATED_VALUES = "SET_MAIN_USER_UPDATED_VALUES";
+export const SET_DRINKS_DATA = "SET_DRINKS_DATA";
+export const SET_FETCH_DRINKS_SPINNER_STATUS =
+  "SET_FETCH_DRINKS_SPINNER_STATUS";
 
-export function setFormFieldSpinner(flag) {
+export function setDrinksSpinner(flag) {
   return {
-    type: REGISTER_SET_SIGNUP_FORM_FIELDS_SPINNER_STATUS,
+    type: SET_FETCH_DRINKS_SPINNER_STATUS,
     payload: flag,
   };
 }
 
-export function setUpdatedValues(data) {
+export function setDrinksData(data) {
   return {
-    type: SET_MAIN_USER_UPDATED_VALUES,
+    type: SET_DRINKS_DATA,
     payload: data,
   };
 }
 
-export function setUser(data) {
-  return {
-    type: SET_MAIN_VIEW_USER,
-    payload: data,
-  };
-}
-
-export function fetchFormFields(id) {
+export function fetchDrinksByFilter(filter, value) {
+  console.log(filter, value);
   return async (dispatch, getState) => {
-    await dispatch(setFormFieldSpinner(true));
+    await dispatch(setDrinksSpinner(true));
     try {
-      const result = await fetch(`${__API__}/get/registration/fields/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json",
-        },
-      });
+      const result = await fetch(`${__API__}/filter.php?${filter}=${value}`);
       let response = await result.json();
       if (response.success === 200) {
-        await dispatch(setFormFieldSpinner(false));
-        await dispatch(setFormFields(response.data));
-        await dispatch(setFieldNames(response.data));
+        await dispatch(setDrinksSpinner(false));
+        await dispatch(setDrinksData(response.drink));
       }
     } catch (e) {
-      await dispatch(setFormFieldSpinner(false));
+      await dispatch(setDrinksSpinner(false));
       console.log(e);
     }
   };
 }
 
 export const initialState = {
-  formSpinner: false,
+  drinkSpinner: false,
   formValue: {},
   errMessage: {
     msg: "",
     field: "",
   },
-  modal: "",
+  drinks: [],
 };
 
 const ACTION_HANDLERS = {
-  [SET_MAIN_USER_UPDATED_VALUES]: (state, action) => {
+  [SET_DRINKS_DATA]: (state, action) => {
     return {
       ...state,
-      formValue: action.payload,
+      drinks: action.payload,
     };
   },
-  // [SET_REGISTER_ERR_MESSAGE]: (state, action) => {
-  //   return {
-  //     ...state,
-  //     errMessage: action.payload,
-  //   };
-  // },
+  [SET_FETCH_DRINKS_SPINNER_STATUS]: (state, action) => {
+    return {
+      ...state,
+      drinkSpinner: action.payload,
+    };
+  },
 };
 
 export default function RegisterReducer(state = initialState, action) {

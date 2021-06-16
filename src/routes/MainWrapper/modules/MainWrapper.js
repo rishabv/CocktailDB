@@ -27,18 +27,10 @@ export function fetchFilterValues(filter) {
   return async (dispatch, getState) => {
     await dispatch(setfetchUserSpinner(true));
     try {
-      const result = await fetch(`${__API__}/list.php?${filter}=list`, {
-        method: "GET",
-        mode:"no-cors",
-        headers: {
-          "content-type": "application/json;",
-          Accept: "application/json",
-        },
-      });
+      const result = await fetch(`${__API__}/list.php?${filter}=list`);
       let response = await result.json();
       console.log(response);
       await dispatch(setfetchUserSpinner(false));
-      console.log(response.drinks);
       await dispatch(setFilters(response.drinks));
     } catch (e) {
       await dispatch(setfetchUserSpinner(false));
@@ -54,6 +46,11 @@ export const initialState = {
 
 const ACTION_HANDLERS = {
   [MAIN_VIEW_SET_FILTER_VALUES]: (state, action) => {
+    for(var i = 0; i < action.payload.length; i++){
+      action.payload[i].label = action.payload[i]['name'];
+      action.payload[i].value = action.payload[i]['phonecode'];
+      delete action.payload[i].phonecode;
+    }
     return {
       ...state,
       filters: action.payload,
@@ -66,6 +63,7 @@ const ACTION_HANDLERS = {
     };
   },
   [SET_MAIN_MODAL_VALUE]: (state, action) => {
+    
     return {
       ...state,
       modal: action.payload,

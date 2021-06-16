@@ -7,21 +7,22 @@ import Filters from "../../../components/FIlters/Filters";
 import Card from "../../../components/Card/Card";
 
 export function RegisterView(params) {
-  let { users, userSpinner, modal } = useSelector((state) => state.mainWrapper);
+  let { filters } = useSelector((state) => state.mainWrapper);
+  let {drinks} = useSelector(state=>state.home)
   const dispatch = useDispatch();
   return (
     <Fragment>
       <div className="container mx-auto px-4 sm:px-8">
         <div className="py-8">
           <Filters />
-
           <section className="text-gray-600 body-font">
             <div className="container px-5 py-24 mx-auto">
               <div className="flex flex-wrap -m-4">
-                <Card />
-                <Card />
-                <Card />
-                <Card />
+                {drinks.map(item=>
+                  <Card {...item}/>
+                )
+                  
+                }
               </div>
             </div>
           </section>

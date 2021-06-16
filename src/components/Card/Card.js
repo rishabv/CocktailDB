@@ -1,6 +1,9 @@
 import React, { Fragment } from "react";
+import { connect, useSelector, useDispatch } from "react-redux";
 
-function Card() {
+function Card({props}) {
+  let {drinks} = useSelector(state=>state.home) 
+  console.log(props);
   return (
     <Fragment>
       <div className="p-4 md:w-1/4">

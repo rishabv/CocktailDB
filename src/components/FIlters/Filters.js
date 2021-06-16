@@ -1,16 +1,31 @@
-import React, { Fragment, useState } from "react";
-import { fetchFilterValues } from "../../routes/MainWrapper/modules/MainWrapper"
+import React, { Fragment, useState, useEffect } from "react";
+import { fetchFilterValues } from "../../routes/MainWrapper/modules/MainWrapper";
 import { connect, useSelector, useDispatch } from "react-redux";
+import {fetchDrinksByFilter} from "../../routes/Home/modules/home"
 
 function Filters() {
-  const [filter, setFilter] = useState("category");
-  const { filterValues } = useSelector((state) => state.mainWrapper);
+  const { filters } = useSelector((state) => state.mainWrapper);
   const dispatch = useDispatch();
+  
+  const [filterBy, setFilterBy] = useState("c");
+  const [filterValue, setFilterValue] = useState("")
 
-  const ChangeFilter = async(e) => {
-    setFilter(e.target.value);
+  const ChangeFilter = async (e) => {
+    await setFilterBy(e.target.value);
     await dispatch(fetchFilterValues(e.target.value));
   };
+  
+  const hanldeChange = async(e)=>{
+    setFilterValue(e.target.value)
+    console.log("here");
+    await dispatch(fetchDrinksByFilter(filterBy,e.target.value));
+  }
+  
+  useEffect(async () => {
+    await dispatch(fetchFilterValues(filterBy));
+    // await setFilterValue(filters[0].strCategory)
+    // await dispatch(fetchDrinksByFilter(filterBy,filterValue));
+  }, []);
 
   return (
     <Fragment>
@@ -38,10 +53,16 @@ function Filters() {
             </div>
           </div>
           <div className="relative">
-            <select className="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-              <option>All</option>
-              <option>Active</option>
-              <option>Inactive</option>
+            <select onChange={(e)=>hanldeChange(e)} className="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+              {filterBy === "c"
+                ? filters.map((item) => <option value={item.strCategory}>{item.strCategory}</option>)
+                : filterBy === "i"
+                ? filters.map((item) => <option value={item.strIngredient1}>{item.strIngredient1}</option>)
+                : filterBy === "g"
+                ? filters.map((item) => <option value={item.strGlass}>{item.strGlass}</option>)
+                : filterBy === "a"
+                ? filters.map((item) => <option value={item.strAlcoholic}>{item.strAlcoholic}</option>)
+                : null}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg
