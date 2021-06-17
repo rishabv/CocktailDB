@@ -1,6 +1,7 @@
 export const MAIN_VIEW_SET_FILTER_VALUES = "MAIN_VIEW_SET_FILTER_VALUES";
-export const MAIN_VIEW_FETCH_USER_SPINNER = "MAIN_VIEW_FETCH_USER_SPINNER";
+export const MAIN_VIEW_FETCH_DRINKS_SPINNER = "MAIN_VIEW_FETCH_DRINKS_SPINNER";
 export const SET_MAIN_MODAL_VALUE = "SET_MAIN_MODAL_VALUE";
+export const SET_MDOAL_DATA = "SET_MDOAL_DATA";
 
 export function setFilters(data) {
   return {
@@ -16,24 +17,30 @@ export function setModal(data) {
   };
 }
 
-export function setfetchUserSpinner(value) {
+export function setFilterSpinner(value) {
   return {
-    type: MAIN_VIEW_FETCH_USER_SPINNER,
+    type: MAIN_VIEW_FETCH_DRINKS_SPINNER,
     payload: value,
+  };
+}
+
+export function setModalData(data) {
+  return {
+    type: SET_MDOAL_DATA,
+    payload: data,
   };
 }
 
 export function fetchFilterValues(filter) {
   return async (dispatch, getState) => {
-    await dispatch(setfetchUserSpinner(true));
+    await dispatch(setFilterSpinner(true));
     try {
       const result = await fetch(`${__API__}/list.php?${filter}=list`);
       let response = await result.json();
-      console.log(response);
-      await dispatch(setfetchUserSpinner(false));
+      await dispatch(setFilterSpinner(false));
       await dispatch(setFilters(response.drinks));
     } catch (e) {
-      await dispatch(setfetchUserSpinner(false));
+      await dispatch(setFilterSpinner(false));
       console.log(e);
     }
   };
@@ -41,32 +48,33 @@ export function fetchFilterValues(filter) {
 
 export const initialState = {
   filters: [],
-  userSpinner: false,
+  filterSpinner: false,
+  modal: false,
 };
 
 const ACTION_HANDLERS = {
   [MAIN_VIEW_SET_FILTER_VALUES]: (state, action) => {
-    for(var i = 0; i < action.payload.length; i++){
-      action.payload[i].label = action.payload[i]['name'];
-      action.payload[i].value = action.payload[i]['phonecode'];
-      delete action.payload[i].phonecode;
-    }
     return {
       ...state,
       filters: action.payload,
     };
   },
-  [MAIN_VIEW_FETCH_USER_SPINNER]: (state, action) => {
+  [MAIN_VIEW_FETCH_DRINKS_SPINNER]: (state, action) => {
     return {
       ...state,
-      userSpinner: action.payload,
+      filterSpinner: action.payload,
     };
   },
   [SET_MAIN_MODAL_VALUE]: (state, action) => {
-    
     return {
       ...state,
       modal: action.payload,
+    };
+  },
+  [SET_MDOAL_DATA]: (state, action) => {
+    return {
+      ...state,
+      modalData: action.payload,
     };
   },
 };

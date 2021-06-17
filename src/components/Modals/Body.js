@@ -9,7 +9,7 @@ export function Body({ children, closeEvent }) {
     <Fragment>
       <div className="modal opacity fixed w-full h-full top-0 left-0 flex items-center justify-center z-10">
         <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-75" />
-        <div className="modal-container bg-white w-11/12 md:w-9/12 mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        <div className="modal-container bg-white w-11/12 md:w-5/12 mx-auto rounded shadow-lg z-50 overflow-y-auto">
           <div className="modal-content p-6 text-center">
             <div className="flex justify-end pb-3">
               <div

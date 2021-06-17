@@ -1,6 +1,6 @@
-# react-starter-boilerplate-hmr
+# CockTail DB
 
-> React Starter Boilerplate with React Fast Refresh and Webpack 5
+> CockTailDB with React Fast Refresh and Webpack 5
 
 ## Features
 
@@ -22,7 +22,7 @@
 Install dependencies
 
 ```
-$ yarn
+$ yarn install
 ```
 
 Run development server
@@ -40,19 +40,5 @@ $ yarn build
 Will create a `dist` directory containing your compiled code.
 
 Depending on your needs, you might want to do more optimization to the production build.
-
-## Webpack Bundle Analyzer
-
-Run in development
-
-```
-$ yarn dev:bundleanalyzer
-```
-
-Run on the production oprimized build
-
-```
-$ yarn build:bundleanalyzer
-```
 
 ..Rishabh verma

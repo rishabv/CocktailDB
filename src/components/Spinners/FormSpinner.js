@@ -1,13 +1,13 @@
 import React from "react";
 import { Fragment } from "react";
-import './FormSpinner.css'
+import "./style.css";
 
-export function FormSpinner(){
-    return (
-        <Fragment>
-        <div className="loader">Loading...</div>
-        </Fragment>
-    )
+export function Spinner() {
+  return (
+    <Fragment>
+      <div className="loader">Loading...</div>
+    </Fragment>
+  );
 }
 
-export default FormSpinner;
+export default Spinner;

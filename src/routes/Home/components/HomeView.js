@@ -5,41 +5,34 @@ import { connect, useSelector, useDispatch } from "react-redux";
 import Spinner from "../../../components/Spinners/FormSpinner";
 import Filters from "../../../components/FIlters/Filters";
 import Card from "../../../components/Card/Card";
+import { ViewModal } from "../../../components/Modals/View";
 
 export function RegisterView(params) {
-  let { filters } = useSelector((state) => state.mainWrapper);
-  let {drinks} = useSelector(state=>state.home)
-  const dispatch = useDispatch();
+  let { drinks, drinkSpinner } = useSelector((state) => state.home);
+  let { modal } = useSelector((state) => state.mainWrapper);
   return (
     <Fragment>
       <div className="container mx-auto px-4 sm:px-8">
+        {modal ? <ViewModal /> : null}
         <div className="py-8">
+          {/* Filter panel to filter the results */}
           <Filters />
+          {/* Listing the filtered drinks */}
           <section className="text-gray-600 body-font">
             <div className="container px-5 py-24 mx-auto">
-              <div className="flex flex-wrap -m-4">
-                {drinks.map(item=>
-                  <Card {...item}/>
-                )
-                  
-                }
-              </div>
+              {drinkSpinner ? (
+                <Spinner />
+              ) : drinks.length == 0 ? (
+                <p>No drinks found</p>
+              ) : (
+                <div className="flex flex-wrap -m-4">
+                  {drinks.map((item,i) => (
+                    <Card item={item} key={i}/>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
-
-          {/* <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                <span className="text-xs xs:text-sm text-gray-900">
-                  Showing 1 to 4 of 50 Entries
-                </span>
-                <div className="inline-flex mt-2 xs:mt-0">
-                  <button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
-                    Prev
-                  </button>
-                  <button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
-                    Next
-                  </button>
-                </div>
-              </div> */}
         </div>
       </div>
     </Fragment>
