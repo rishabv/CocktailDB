@@ -1,7 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { fetchFilterValues } from "../../routes/MainWrapper/modules/MainWrapper";
 import { connect, useSelector, useDispatch } from "react-redux";
-import { fetchDrinksByFilter,SearchDrinks } from "../../routes/Home/modules/home";
+import {
+  fetchDrinksByFilter,
+  SearchDrinks,
+} from "../../routes/Home/modules/home";
 import Spinner from "../Spinners/FormSpinner";
 
 function Filters() {
@@ -28,9 +31,9 @@ function Filters() {
     // await dispatch(fetchDrinksByFilter(filterBy,filterValue));
   }, []);
 
-  const onSearch = async(e) => {
+  const onSearch = async (e) => {
     e.preventDefault();
-    await dispatch(SearchDrinks(searchterm))
+    await dispatch(SearchDrinks(searchterm));
   };
 
   return (
